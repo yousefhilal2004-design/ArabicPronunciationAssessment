@@ -1,0 +1,88 @@
+============================================================
+Date: 2026-06-21 12:09:02
+Reference: arabi_1.wav
+Student: daw_1.wav
+MFCC Score: 42.93%
+Pitch Score: 86.70%
+Duration Score: 89.41%
+Formant Score: 53.33%
+Final Score: 54.25%
+============================================================
+
+============================================================
+Date: 2026-06-21 12:09:44
+Reference: arabi_1.wav
+Student: arabi_5.wav
+MFCC Score: 60.03%
+Pitch Score: 91.89%
+Duration Score: 96.67%
+Formant Score: 18.73%
+Final Score: 56.04%
+============================================================
+
+============================================================
+Date: 2026-06-21 12:13:29
+Reference: daw_5.wav
+Student: ghorfa_5.wav
+MFCC Score: 27.71%
+Pitch Score: 93.96%
+Duration Score: 82.86%
+Formant Score: 82.03%
+Final Score: 54.01%
+============================================================
+
+============================================================
+Date: 2026-06-21 12:13:59
+Reference: khaled_5.wav
+Student: qalam_2.wav
+MFCC Score: 38.73%
+Pitch Score: 84.82%
+Duration Score: 95.38%
+Formant Score: 73.91%
+Final Score: 57.30%
+============================================================
+
+============================================================
+Date: 2026-06-21 12:20:30
+Reference: khaled_5.wav
+Student: qalam_2.wav
+MFCC Score: 40.93%
+Pitch Score: 79.97%
+Duration Score: 83.33%
+Formant Score: 26.23%
+Final Score: 46.11%
+============================================================
+
+============================================================
+Date: 2026-06-21 13:02:55
+Reference: arabi_2.wav
+Student: daw_2.wav
+MFCC Score: 33.50%
+Pitch Score: 90.83%
+Duration Score: 95.20%
+Formant Score: 82.92%
+Final Score: 57.90%
+============================================================
+
+============================================================
+Date: 2026-06-21 13:03:25
+Reference: arabi_1.wav
+Student: khaled_5.wav
+MFCC Score: 26.37%
+Pitch Score: 78.85%
+Duration Score: 93.60%
+Formant Score: 92.40%
+Final Score: 54.90%
+============================================================
+
+============================================================
+Date: 2026-06-21 13:03:48
+Reference: arabi_1.wav
+Student: khaled_5.wav
+MFCC Score: 69.84%
+Pitch Score: 95.53%
+Duration Score: 98.40%
+Formant Score: 84.50%
+Final Score: 73.90%
+============================================================
+
