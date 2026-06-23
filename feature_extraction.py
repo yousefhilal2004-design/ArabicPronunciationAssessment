@@ -1,26 +1,38 @@
+"""
+feature_extraction.py
+======================
+Extracts all required acoustic features per project spec:
+  - MFCC (12 coefficients)   <- PDF: "Extract: MFCC (12 coefficients)"
+  - Pitch
+  - Energy
+  - Duration
+  - Formants (F1, F2, F3)
+"""
+
 import librosa
 import numpy as np
 import parselmouth
 from parselmouth.praat import call
 
 
-def extract_mfcc(y, sr, n_mfcc=13):
+def extract_mfcc(y, sr, n_mfcc=12):
     """
-    Extract MFCC features (13 coefficients as required by project spec).
-    NOT normalised — raw values are used for cosine similarity comparison.
+    Extract MFCC features.
+    PDF requirement: "MFCC (12 coefficients)" -> n_mfcc=12 (FIXED from 13).
+    Returns raw (non-normalized) MFCC matrix, shape: (n_mfcc, frames).
     """
     mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=n_mfcc)
-    return mfcc  # shape: (n_mfcc, frames)
+    return mfcc
 
 
 def extract_pitch(file_path):
     """
-    Extract mean pitch (F0) in Hz using Parselmouth.
-    Returns 0 if unvoiced / extraction fails.
+    Mean pitch (F0) in Hz using Parselmouth/Praat.
+    Returns 0.0 if unvoiced or extraction fails.
     """
     try:
-        sound  = parselmouth.Sound(file_path)
-        pitch  = sound.to_pitch()
+        sound = parselmouth.Sound(file_path)
+        pitch = sound.to_pitch()
         values = pitch.selected_array['frequency']
         voiced = values[values > 0]
         if len(voiced) == 0:
@@ -31,10 +43,10 @@ def extract_pitch(file_path):
 
 
 def extract_pitch_contour(file_path):
-    """Extract full pitch contour array (Hz per frame)."""
+    """Full pitch contour array (Hz per frame), 0 = unvoiced."""
     try:
-        sound  = parselmouth.Sound(file_path)
-        pitch  = sound.to_pitch()
+        sound = parselmouth.Sound(file_path)
+        pitch = sound.to_pitch()
         values = pitch.selected_array['frequency']
         return values.astype(float)
     except Exception:
@@ -42,16 +54,16 @@ def extract_pitch_contour(file_path):
 
 
 def extract_duration(y, sr):
-    """Return audio duration in seconds."""
+    """Audio duration in seconds."""
     return len(y) / sr
 
 
 def extract_energy(y, frame_length=2048, hop_length=512):
-    """Short-time energy per frame."""
-    energy = np.array([
-        np.sum(y[i:i + frame_length] ** 2)
-        for i in range(0, len(y) - frame_length, hop_length)
-    ])
+    """Short-time energy per frame (vectorized, no Python loop)."""
+    if len(y) < frame_length:
+        return np.array([np.sum(y ** 2)])
+    frames = librosa.util.frame(y, frame_length=frame_length, hop_length=hop_length)
+    energy = np.sum(frames ** 2, axis=0)
     return energy
 
 
@@ -70,11 +82,11 @@ def extract_zcr(y, frame_length=2048, hop_length=512):
 
 def extract_formants(file_path, num_formants=3):
     """
-    Extract F1, F2, F3 at the midpoint of the utterance using Parselmouth.
-    Returns a list of floats; 0 if a formant cannot be found.
+    F1, F2, F3 at the midpoint of the utterance (Praat Burg method).
+    Returns a list of floats; 0.0 if a formant cannot be found.
     """
     try:
-        sound   = parselmouth.Sound(file_path)
+        sound = parselmouth.Sound(file_path)
         formant = sound.to_formant_burg(
             max_number_of_formants=5.0,
             maximum_formant=5500.0,
@@ -94,12 +106,12 @@ def extract_formants(file_path, num_formants=3):
         return [0.0] * num_formants
 
 
-def extract_formant_contour(file_path, num_formants=3):
-    """Extract F1–F3 contours over time (shape: num_formants × time_steps)."""
+def extract_formant_contour(file_path, num_formants=3, step=0.01):
+    """F1-F3 contours over time, shape: (num_formants, time_steps)."""
     try:
-        sound   = parselmouth.Sound(file_path)
+        sound = parselmouth.Sound(file_path)
         formant = sound.to_formant_burg()
-        times   = np.arange(0, sound.duration, 0.01)
+        times = np.arange(0, sound.duration, step)
         contours = []
         for i in range(1, num_formants + 1):
             contour = []
@@ -116,9 +128,9 @@ def extract_formant_contour(file_path, num_formants=3):
 
 
 def extract_all_features(file_path, y, sr):
-    """Extract and return all features as a dictionary."""
+    """Extract and return all required features as a dictionary."""
     return {
-        'mfcc':             extract_mfcc(y, sr),
+        'mfcc':             extract_mfcc(y, sr, n_mfcc=12),
         'pitch':            extract_pitch(file_path),
         'pitch_contour':    extract_pitch_contour(file_path),
         'duration':         extract_duration(y, sr),

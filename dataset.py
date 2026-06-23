@@ -3,29 +3,34 @@ dataset.py
 ==========
 Manages the Arabic pronunciation dataset.
 
-Expected folder structure:
+Expected folder structure (matches user's actual dataset):
   dataset/
-    speaker_1/
+    Speaker_1/
       arabi_1.wav
       daw_1.wav
       ...
-    speaker_2/
-      arabi_2.wav
+    Speaker_2/
       ...
+    ...
+    Speaker_5/
+      ...
+
+FIXED: original code searched only for lowercase "speaker_*", which on a
+case-sensitive filesystem would match nothing if folders are named
+"Speaker_1".."Speaker_5". Now matches both cases.
 """
 
 import os
 import glob
 import numpy as np
 
-from audio_utils import preprocess_audio, load_audio
+from audio_utils import preprocess_audio
 from feature_extraction import extract_all_features
 
 
 class ArabicDataset:
     """Manages the Arabic pronunciation dataset."""
 
-    # Canonical word keys
     TEST_WORDS = [
         'arabi', 'daw', 'ghorfa', 'hadeqa', 'khaled',
         'qalam', 'sadeeq', 'tareeq', 'thaletha', 'tharf'
@@ -65,26 +70,30 @@ class ArabicDataset:
         'pharyngeal':  ['ح', 'ع'],
         'uvular':      ['خ', 'غ'],
         'regular':     ['ب', 'ت', 'ث', 'ج', 'د', 'ذ', 'ر', 'ز', 'س',
-                        'ش', 'ف', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي'],
+                         'ش', 'ف', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي'],
     }
 
     # ------------------------------------------------------------------
     def __init__(self, dataset_path):
         self.dataset_path = dataset_path
-        self.speakers     = []
-        self.audio_files  = {}   # {speaker: {word: path}}
-        self.features     = {}   # {speaker: {word: features}}
+        self.speakers = []
+        self.audio_files = {}   # {speaker: {word: path}}
+        self.features = {}      # {speaker: {word: features}}
         self._load_dataset()
 
     # ------------------------------------------------------------------
     def _load_dataset(self):
         if not os.path.exists(self.dataset_path):
-            print(f"⚠️  Dataset path '{self.dataset_path}' not found.")
+            print(f"Dataset path '{self.dataset_path}' not found.")
             return
 
-        speaker_dirs = sorted(glob.glob(
-            os.path.join(self.dataset_path, "speaker_*")
-        ))
+        # FIXED: match both "speaker_*" and "Speaker_*" (case-insensitive)
+        all_entries = sorted(os.listdir(self.dataset_path))
+        speaker_dirs = [
+            os.path.join(self.dataset_path, d) for d in all_entries
+            if d.lower().startswith("speaker_")
+            and os.path.isdir(os.path.join(self.dataset_path, d))
+        ]
 
         for speaker_dir in speaker_dirs:
             speaker = os.path.basename(speaker_dir)
@@ -94,21 +103,20 @@ class ArabicDataset:
             for audio_file in glob.glob(os.path.join(speaker_dir, "*.wav")):
                 filename = os.path.splitext(os.path.basename(audio_file))[0]
                 # filename format: <word>_<number>  e.g. arabi_1
-                word = filename.split('_')[0]
+                word = filename.split('_')[0].lower()
 
                 if word in self.WORD_MAPPING:
                     self.audio_files[speaker][word] = audio_file
                 else:
-                    # Fallback: prefix match
                     for known_word in self.TEST_WORDS:
-                        if filename.startswith(known_word):
+                        if filename.lower().startswith(known_word):
                             self.audio_files[speaker][known_word] = audio_file
                             break
 
-        print(f"\n📁 Dataset loaded: {self.dataset_path}")
-        print(f"👥 Speakers found: {len(self.speakers)}")
+        print(f"\nDataset loaded: {self.dataset_path}")
+        print(f"Speakers found: {len(self.speakers)}")
         for sp in self.speakers:
-            print(f"  • {sp}: {len(self.audio_files[sp])} files")
+            print(f"  - {sp}: {len(self.audio_files[sp])} files")
 
         self._verify_dataset()
 
@@ -120,11 +128,11 @@ class ArabicDataset:
                 missing[sp] = m
 
         if missing:
-            print("\n⚠️  Missing audio files:")
+            print("\nMissing audio files:")
             for sp, words in missing.items():
-                print(f"  • {sp}: {', '.join(words)}")
+                print(f"  - {sp}: {', '.join(words)}")
         else:
-            print("✅ All speakers have all 10 words.")
+            print("All speakers have all 10 words.")
 
     # ------------------------------------------------------------------
     # Data accessors
@@ -238,12 +246,12 @@ class ArabicDataset:
         print("\n" + "=" * 70)
         print("ARABIC PRONUNCIATION DATASET INFORMATION")
         print("=" * 70)
-        print(f"\n📁 Path:    {self.dataset_path}")
-        print(f"👥 Speakers: {self.get_speaker_count()}")
-        print(f"📝 Words:    {self.get_word_count()}")
-        print(f"📊 Total:    {self.get_speaker_count() * self.get_word_count()} files")
+        print(f"\nPath:    {self.dataset_path}")
+        print(f"Speakers: {self.get_speaker_count()}")
+        print(f"Words:    {self.get_word_count()}")
+        print(f"Total:    {self.get_speaker_count() * self.get_word_count()} files")
 
-        print("\n📋 Word List:")
+        print("\nWord List:")
         print("-" * 70)
         print(f"{'Word':<15} {'Arabic':<10} {'English':<15} {'Sounds':<25}")
         print("-" * 70)
@@ -252,12 +260,12 @@ class ArabicDataset:
             print(f"{w:<15} {self.get_arabic_name(w):<10} "
                   f"{self.get_english_meaning(w):<15} {sounds:<25}")
 
-        print("\n🔊 Sound Types:")
+        print("\nSound Types:")
         print("-" * 70)
         for stype, sounds in self.SOUND_TYPES.items():
             print(f"  {stype.upper():<14}: {', '.join(sounds)}")
 
-        print("\n👥 Speaker Files:")
+        print("\nSpeaker Files:")
         print("-" * 70)
         for sp in self.speakers:
             words = list(self.audio_files[sp].keys())

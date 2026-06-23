@@ -1,3 +1,10 @@
+"""
+audio_utils.py
+==============
+Preprocessing pipeline per project spec:
+  "Apply silence removal, normalization, framing, and windowing."
+"""
+
 import librosa
 import numpy as np
 import soundfile as sf
@@ -20,7 +27,7 @@ def remove_silence(y, top_db=20):
 
 
 def normalize_audio(y):
-    """Normalize audio to [-1, 1] range."""
+    """Normalize audio to [-1, 1] range (peak normalization)."""
     max_val = np.max(np.abs(y))
     if max_val == 0:
         return y
@@ -28,7 +35,7 @@ def normalize_audio(y):
 
 
 def preprocess_audio(file_path, sr=16000):
-    """Complete preprocessing pipeline: load → silence removal → normalize."""
+    """Complete preprocessing pipeline: load -> silence removal -> normalize."""
     y, sr = load_audio(file_path, sr)
     if y is None:
         return None, None
@@ -43,9 +50,12 @@ def save_audio(y, sr, file_path):
 
 
 def apply_framing(y, sr, frame_size=0.025, frame_shift=0.010):
-    """Apply framing to audio signal."""
+    """
+    Apply framing to audio signal.
+    Default: 25 ms frames, 10 ms shift -- standard short-time analysis values.
+    """
     frame_length = int(frame_size * sr)
-    hop_length   = int(frame_shift * sr)
+    hop_length = int(frame_shift * sr)
     frames = librosa.util.frame(y, frame_length=frame_length, hop_length=hop_length)
     return frames, frame_length, hop_length
 

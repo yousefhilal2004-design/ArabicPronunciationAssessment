@@ -86,3 +86,146 @@ Formant Score: 84.50%
 Final Score: 73.90%
 ============================================================
 
+============================================================
+Date: 2026-06-23 18:58:48
+Reference: arabi_5.wav
+Student: qalam_5.wav
+MFCC Score: 30.22%
+Pitch Score: 92.88%
+Duration Score: 92.00%
+Formant Score: 62.63%
+Final Score: 52.30%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:02:01
+Reference: arabi_5.wav
+Student: khaled_5.wav
+MFCC Score: 13.47%
+Pitch Score: 77.29%
+Duration Score: 84.00%
+Formant Score: 55.88%
+Final Score: 48.80%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:02:23
+Reference: arabi_5.wav
+Student: arabi_1.wav
+MFCC Score: 32.83%
+Pitch Score: 83.78%
+Duration Score: 96.80%
+Formant Score: 52.36%
+Final Score: 59.70%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:03:38
+Reference: arabi_5.wav
+Student: khaled_5.wav
+MFCC Score: 13.47%
+Pitch Score: 77.29%
+Duration Score: 84.00%
+Formant Score: 55.88%
+Final Score: 48.80%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:05:06
+Reference: hadeqa_2.wav
+Student: khaled_5.wav
+MFCC Score: 12.57%
+Pitch Score: 68.91%
+Duration Score: 84.00%
+Formant Score: 85.16%
+Final Score: 52.60%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:08:12
+Reference: hadeqa_2.wav
+Student: khaled_5.wav
+MFCC Score: 100.00%
+Pitch Score: 100.00%
+Duration Score: 100.00%
+Formant Score: 100.00%
+Final Score: 100.00%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:09:17
+Reference: arabi_2.wav
+Student: arabi_1.wav
+MFCC Score: 62.67%
+Pitch Score: 92.56%
+Duration Score: 96.80%
+Formant Score: 80.63%
+Final Score: 79.10%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:10:59
+Reference: hadeqa_1.wav
+Student: hadeqa_2.wav
+MFCC Score: 66.54%
+Pitch Score: 87.29%
+Duration Score: 100.00%
+Formant Score: 95.42%
+Final Score: 83.20%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:11:51
+Reference: hadeqa_2.wav
+Student: hadeqa_3.wav
+MFCC Score: 26.98%
+Pitch Score: 83.97%
+Duration Score: 100.00%
+Formant Score: 92.77%
+Final Score: 66.10%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:12:45
+Reference: arabi_1.wav
+Student: hadeqa_1.wav
+MFCC Score: 12.80%
+Pitch Score: 82.03%
+Duration Score: 96.80%
+Formant Score: 95.52%
+Final Score: 60.00%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:13:34
+Reference: arabi_1.wav
+Student: khaled_1.wav
+MFCC Score: 13.49%
+Pitch Score: 89.66%
+Duration Score: 84.00%
+Formant Score: 86.54%
+Final Score: 57.40%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:14:47
+Reference: hadeqa_2.wav
+Student: sadeeq_3.wav
+MFCC Score: 10.49%
+Pitch Score: 82.60%
+Duration Score: 87.20%
+Formant Score: 80.96%
+Final Score: 54.30%
+============================================================
+
+============================================================
+Date: 2026-06-23 19:15:52
+Reference: hadeqa_2.wav
+Student: sadeeq_3.wav
+MFCC Score: 30.25%
+Pitch Score: 84.90%
+Duration Score: 100.00%
+Formant Score: 94.79%
+Final Score: 68.00%
+============================================================
+
